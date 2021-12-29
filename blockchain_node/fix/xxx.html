@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js" integrity="sha256-nWBTbvxhJgjslRyuAKJHK+XcZPlCnmIAAMixz6EefVk=" crossorigin="anonymous"></script>
+        <script language="javascript" type="text/javascript" src="./abi.js"></script>
+        <title>Input Rekam Medis</title>
+        
+    </head>
+
+
+    <script>
+        web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.100.28:8545", 'echo-protocol'));
+        contract = new web3.eth.Contract(abi, '0x38af17532c7fc9c43734b0fc6d97d63428cd7c20');
+        window.addEventListener('load', function () {
+        if (typeof web3 !== 'undefined') {
+            console.log('Web3 Detected! ' + web3.currentProvider.constructor.name)
+            window.web3 = new Web3(web3.currentProvider);
+        } else {
+            console.log('No Web3 Detected... using HTTP Provider')
+            window.web3 = new Web3(new Web3.providers.HttpProvider("https://192.168.100.28:8545", 'echo-protocol'));
+        }
+        })
+        
+  
+
+          contract.methods.daftar_penumpang(03,'fei23','sag','fadhil','0','0','0').send( {from: '0x3e1a9c4ab16817cd19f511c4b5139292fb9710c8'}).then( function(tx) {
+          console.log("Transaction: ", tx);
+          window.alert("Sukses \n transaction hash on console")
+
+          });
+
+  
+  
+      </script>
+  </html>

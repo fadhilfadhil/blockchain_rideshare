@@ -1,0 +1,79 @@
+<html>
+    <head>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js" integrity="sha256-nWBTbvxhJgjslRyuAKJHK+XcZPlCnmIAAMixz6EefVk=" crossorigin="anonymous"></script>
+        <script language="javascript" type="text/javascript" src="./abi.js"></script>
+        <title>DB Order</title>
+        
+    </head>
+
+<body>
+    <ul class="nav justify-content-end p-3 mb-2 bg-primary text-white">
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#"></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#"></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="#"></a>
+          </li>
+        <li class="nav-item ">
+          <a class="nav-link disabled text-danger" href="#" tabindex="-1" aria-disabled="true" id="acc">account</a>
+        </li>
+      </ul>
+
+      <div class="container center_div">
+        <table class="table table-bordered" id="datas" >
+          <thead>
+            <tr>
+              <th scope="col">Username</th>
+              <th scope="col">Driver</th>
+              <th scope="col">Long</th>
+              <th scope="col">Lat</th>
+              <th scope="col">Dest Long</th>
+              <th scope="col">Dest Lat</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+          </tbody>
+        </table>
+      </div>
+
+</body>
+    <script>
+        web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.100.28:8545", 'echo-protocol'));
+        contract = new web3.eth.Contract(abiorder, '0x2472e7a3de115a6b99dae0f6e4d25331b2cea745');
+        window.addEventListener('load', function () {
+        if (typeof web3 !== 'undefined') {
+            console.log('Web3 Detected! ' + web3.currentProvider.constructor.name)
+            window.web3 = new Web3(web3.currentProvider);
+        } else {
+            console.log('No Web3 Detected... using HTTP Provider')
+            window.web3 = new Web3(new Web3.providers.HttpProvider("https://192.168.100.28:8545", 'echo-protocol'));
+        }
+        })
+        
+  
+
+        contract.methods.ret_all().call().then( function( isi ) {
+                var table = document.getElementById("datas");
+                var tr="";
+                isi.forEach(x=>{
+                    tr+='<tr>';
+                    tr+='<td>'+x.username+'</td>'+'<td>'+x.driver+'</td>'+'<td>'+x.long+'</td>'+'<td>'+x.lat+'</td>'+'<td>'+x.dest_long+'</td>'+'<td>'+x.dest_lat+'</td>'+'<td>'+x.status+'</td>'
+                    tr+='</tr>'
+                })          
+                table.innerHTML+=tr;
+            })
+  
+  
+      </script>
+  </html>
+
+  

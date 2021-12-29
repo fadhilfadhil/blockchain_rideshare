@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js" integrity="sha256-nWBTbvxhJgjslRyuAKJHK+XcZPlCnmIAAMixz6EefVk=" crossorigin="anonymous"></script>
+        <script language="javascript" type="text/javascript" src="./abi.js"></script>
+    </head>
+
+<body id='container'>
+
+
+</body>
+    <script>
+        web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.100.28:8545", 'echo-protocol'));
+        contract = new web3.eth.Contract(abiready, '0x469ccbdc44143cd3407d8110843024147aca7ec9');
+        window.addEventListener('load', function () {
+        if (typeof web3 !== 'undefined') {
+            console.log('Web3 Detected! ' + web3.currentProvider.constructor.name)
+            window.web3 = new Web3(web3.currentProvider);
+        } else {
+            console.log('No Web3 Detected... using HTTP Provider')
+            window.web3 = new Web3(new Web3.providers.HttpProvider("https://192.168.100.28:8545", 'echo-protocol'));
+        }
+        })
+        
+  
+
+        contract.methods.get_ready_all().call().then( function( isi ) {
+
+          let ele = document.getElementById('container');
+                isi.forEach(x=>{
+                    ele.innerHTML += x.username+'~'+x.long+'~'+x.lat+'~'+x.status;
+                    ele.innerHTML += ';'
+                })          
+      
+            })
+  
+  
+      </script>
+  </html>
+
+  
