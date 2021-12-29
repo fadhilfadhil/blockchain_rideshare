@@ -1,0 +1,6 @@
+{
+    "require": {
+        "sc0vu/web3.php": "dev-master",
+        "cloutier/php-ipfs-api": "^0.0.6"
+    }
+}

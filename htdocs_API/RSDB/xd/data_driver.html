@@ -1,0 +1,114 @@
+<html>
+    <head>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js" integrity="sha256-nWBTbvxhJgjslRyuAKJHK+XcZPlCnmIAAMixz6EefVk=" crossorigin="anonymous"></script>
+        <script language="javascript" type="text/javascript" src="./abi.js"></script>
+        <script language="javascript" type="text/javascript" src="./config.js"></script>
+        <title>DB Ride Share</title>
+        
+    </head>
+
+<body>
+    <ul class="nav justify-content-end p-3 mb-2 bg-primary text-white">
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#"></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#"></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="#"></a>
+          </li>
+        <li class="nav-item ">
+          <a class="nav-link disabled text-danger" href="#" tabindex="-1" aria-disabled="true" id="acc">0x4776d5feb2151526564e784db8d9bcf1f85f9f49</a>
+        </li>
+      </ul>
+
+      <div class="container center_div">
+        <table class="table table-bordered" id="datas" >
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Nama</th>
+              <th scope="col">Username</th>
+              <th scope="col">Password</th>
+              <th scope="col">No Handphone</th>
+              <th scope="col">No KTP</th>
+              <th scope="col">Email</th>
+              <th scope="col">Plat</th>
+              <th scope="col">STNK</th>
+              <th scope="col">SKCK</th>
+              <th scope="col">Rating</th>
+              <th scope="col">pict</th>
+              <th scope="col">Status</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+          </tbody>
+        </table>
+      </div>
+
+</body>
+    <script>
+        web3 = new Web3(new Web3.providers.HttpProvider("http://"+hosting+":8545", 'echo-protocol'));
+        contract = new web3.eth.Contract(abi, '0xdb7dada79dfb2597192208582693bee34733c3fd');
+        window.addEventListener('load', function () {
+        if (typeof web3 !== 'undefined') {
+            console.log('Web3 Detected! ' + web3.currentProvider.constructor.name)
+            window.web3 = new Web3(web3.currentProvider);
+        } else {
+            console.log('No Web3 Detected... using HTTP Provider')
+            window.web3 = new Web3(new Web3.providers.HttpProvider("https://"+hosting+":8545", 'echo-protocol'));
+        }
+        })
+        
+        function verif(username) {
+          let confirmAction = confirm("Verifikasi Akun "+username+"?");
+    
+          if (confirmAction) {
+          contract.methods.verif_driver(username).send( {from: '0x3e1a9c4ab16817cd19f511c4b5139292fb9710c8'}).then( function(tx) {
+          console.log("Transaction: ", tx);
+          window.alert("Sukses \n transaction hash on console");
+          });
+          alert("Action successfully executed");
+          } else {
+          alert("Action canceled");
+          }
+        
+        }
+  
+
+        contract.methods.get_driver_all().call().then( function( isi ) {
+                var table = document.getElementById("datas");
+                var tr="";
+                isi.forEach(x=>{
+                    tr+='<tr>';
+                    tr+='<td>'+x.id_driver+'</td>'+'<td>'+x.nama+'</td>'+'<td>'+x.username+'</td>'+'<td>'+x.password+'</td>'+'<td>'+x.no_telepon+'</td>'+'<td>'+x.no_ktp+'</td>'+'<td>'+x.email+'</td>'+'<td>'+x.plat+'</td>'
+                    tr+='<td><a href="http://'+hosting+':8080/ipfs/'+x.no_stnk+'" target="_blank">'+x.no_stnk.substring(0, 7) +'...</a></td>'
+                    tr+='<td><a href="http://'+hosting+':8080/ipfs/'+x.skck+'" target="_blank">'+x.skck.substring(0, 7)+'...</a></td>'
+                    tr+='<td>'+x.rating/x.total+'</td>'
+                    tr+='<td><a href="http://'+hosting+':8080/ipfs/'+x.pict+'" target="_blank">'+x.pict.substring(0, 7)+'...</a></td>'+'<td>'+x.status+'</td>'
+                    if (x.status == 'unverified'){
+                        tr+='<td><button onclick="'
+                        tr+= "verif('"+x.username
+                        tr+= "'"
+                        tr+=')">Verify This Driver</td>'
+                    }
+                    else{
+                        tr+='<td>This Driver is Verified</td>'
+                    }
+                    tr+='</tr>'
+                })          
+                table.innerHTML+=tr;
+            })
+  
+  
+      </script>
+  </html>
+
+  
